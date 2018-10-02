@@ -1,8 +1,9 @@
 package cz.dynawest.csvcruncher;
 
 import cz.dynawest.logging.LoggingUtils;
-import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * This was written long ago and then lost and decompiled from an old .jar of an old version, and refactored a bit.
@@ -16,7 +17,7 @@ public class App
     }
 
     public static final String STR_USAGE = "Usage: crunch [-in] <inCSV> [-out] <outCSV> [-sql] <SQL>";
-    private static final Logger log = Logger.getLogger(App.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) throws Exception
     {
@@ -39,11 +40,11 @@ public class App
         int relPos = -1;
         App.OptionsNext next = null;
 
-        log.fine(" Parameters: ");
+        log.debug(" Parameters: ");
         for (int i = 0; i < args.length; ++i) {
             String arg = args[i];
             //System.out.println(" * " + arg);
-            log.fine(" * " + arg);
+            log.debug(" * " + arg);
 
             // JSON output
             if (arg.startsWith("--json")) {

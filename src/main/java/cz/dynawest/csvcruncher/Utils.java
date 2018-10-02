@@ -1,21 +1,17 @@
 package cz.dynawest.csvcruncher;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Utils
 {
-    private static final Logger log = Logger.getLogger(Utils.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
     static File resolvePathToUserDirIfRelative(Path path)
     {
@@ -29,6 +25,8 @@ public class Utils
 
     public static String getVersion()
     {
+        org.hsqldb.persist.Logger x;
+
         //String versionFilePath = JarFile.MANIFEST_NAME;
         //String versionKey = "Implementation-Version";
         //String versionKey = "Release-Version";
@@ -72,7 +70,7 @@ public class Utils
                 }
             }*/
         } catch (Exception ex) {
-            log.warning("Invalid " + versionFilePath + ": " + ex.getMessage());
+            log.warn("Invalid " + versionFilePath + ": " + ex.getMessage());
         }
         return null;
     }

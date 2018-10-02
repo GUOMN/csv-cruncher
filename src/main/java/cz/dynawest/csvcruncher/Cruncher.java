@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -40,10 +39,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Cruncher
 {
-    private static final Logger log = Logger.getLogger(App.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(App.class);
 
     public static final String TABLE_NAME__OUTPUT = "output";
     public static final long TIMESTAMP_SUBSTRACT = 1_530_000_000_000L; // To make the unique ID a smaller number.
@@ -249,7 +250,7 @@ public class Cruncher
         }
         catch (SQLException ex) {
             String msg = "Failed listing tables: " + ex.getMessage();
-            log.severe(msg);
+            log.error(msg);
             return msg;
         }
     }
@@ -553,7 +554,7 @@ public class Cruncher
         String csvSettings = "encoding=UTF-8;cache_rows=50000;cache_size=10240000;" + ignoreFirstFlag + "fs=,;qc=" + quoteCharacter;
         String DESC = readOnly ? "DESC" : "";  // Not a mistake, HSQLDB really has "DESC" here for read only.
         String sql = "SET TABLE " + tableName + " SOURCE \'" + csvPath + ";" + csvSettings + "' " + DESC;
-        log.fine("CSV import SQL: " + sql);
+        log.debug("CSV import SQL: " + sql);
         statement = this.conn.prepareStatement(sql);
         success = statement.execute();
     }
@@ -610,7 +611,7 @@ public class Cruncher
             case Types.TIME:    val = (""+resultSet.getTime(colIndex)); break;
             case Types.TIMESTAMP:    val = (""+resultSet.getTimestamp(colIndex)).replace(' ', 'T');  break; // JS Date() takes "1995-12-17T03:24:00"
             default:
-                log.severe("Unsupported type of column " + metaData.getColumnLabel(colIndex) + ": " + metaData.getColumnTypeName(colIndex));
+                log.error("Unsupported type of column " + metaData.getColumnLabel(colIndex) + ": " + metaData.getColumnTypeName(colIndex));
                 return null;
         }
         if (resultSet.wasNull())

@@ -10,10 +10,11 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LoggingUtils
 {
-    private static final Logger log = Logger.getLogger(LoggingUtils.class.getName());
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(LoggingUtils.class);
     private static final String DEFAULT_CLASSPATH_SEARCH_PATH = "/logging.properties";
     private static final String DW_DEFAULT_PROPS_PATH = "/cz/dynawest/logging/logging-default.properties";
 
@@ -47,7 +48,7 @@ public class LoggingUtils
                 }
             }
 
-            log.fine("Loading logging conf from: " + logConfigFile + (!wasFromSysProp ? "" : " (set in sys var java.util.logging.config.file)"));
+            log.debug("Loading logging conf from: " + logConfigFile + (!wasFromSysProp ? "" : " (set in sys var java.util.logging.config.file)"));
             if (configIS == null) {
                 log.info("Log config file not found: " + logConfigFile + "  Using LoggingUtils' default.");
                 logConfigFile = DW_DEFAULT_PROPS_PATH;
